@@ -50,5 +50,12 @@ if __name__=='__main__':
         ip = sys.argv[1]
         cidr = sys.argv[2]
         print(inCIDR(ip=ip,cidr=cidr))
+    elif sys.argv.__len__() > 3 or not '/' in sys.argv[-1]:
+        for i in sys.argv[1:]:
+            ip = i
+            procs = [Process(target=x,args=[ip]) for x in [checkAWS, checkGCP, checkAzure]]
+            for proc in procs:
+             proc.start()
     else:
         print("Usage: \n To check if IP is in range, use something like $python3 inCIDR <ip> <cidr block>\neg python3 inCIDR 192.168.0.1 192.168.0.0/21 \n To check if IP belongs to a known hosting service use inCIDR <ip> ")
+    
