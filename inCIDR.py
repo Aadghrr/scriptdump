@@ -8,7 +8,7 @@ def checkCloud(ip,cloud,ipJSON,ipprefix):
         if 'ipv6Prefix' in block.keys():
             continue
         if inCIDR(ip=ip, cidr=block[ipprefix]):
-            print(ip,'owned by',cloud)
+            print(ip,'owned by',cloud,' Details:',block)
             return
 
 def checkAWS(ip):
@@ -19,6 +19,8 @@ def checkGCP(ip):
 
 def checkAzure(ip):
     r = requests.get('https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20200921.json')
+    if 404 == r.status_code:
+        return
     r = json.loads(r.content)
     for value in r['values']:
         for block in value['properties']['addressPrefixes']:
@@ -26,7 +28,7 @@ def checkAzure(ip):
                 continue
             else:
                 if inCIDR(ip=ip,cidr=block):
-                    print(ip,'owned by Microsoft')
+                    print(ip,'owned by Microsoft. Details:',block)
                     return
 
 def inCIDR(ip=None,cidr=None):
