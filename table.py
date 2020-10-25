@@ -41,13 +41,11 @@ def findDelims(corpus, approxRows=500, approxCols=6, minSD=15):
     rowDelims = [d[0] for d in delims if not d[0] in colDelims]
     return rowDelims, colDelims
 
-if __name__ == '__main__':
+def generatetable(corpus, approxRows=500,approxCols=6):
     rowDelims, colDelims = findDelims(corpus)
     print("Possible delimiters\nRow:",rowDelims,"\nCols:",colDelims)
     rowDelim = chooseRowDelim(rowDelims)
     colDelim = chooseColDelim(colDelims)
     print("Using",rowDelim.__repr__(),"and",colDelim.__repr__())
-    table = [col.split(colDelim) for col in corpus.split(rowDelim)]
-    for row in table[:25]:
-        print(row)
-    print('...')
+    table = [row.split(colDelim) for row in corpus.split(rowDelim) if len(row)>approxCols]
+    return table
